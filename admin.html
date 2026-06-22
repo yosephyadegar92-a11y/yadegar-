@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yadegar & Co — Applications</title>
+  <script src="config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #050505;
+      --s1:      #0d0d0d;
+      --s2:      #141414;
+      --border:  #1e1e1e;
+      --border2: #2a2a2a;
+      --white:   #ffffff;
+      --off:     #cccccc;
+      --muted:   #666666;
+      --dim:     #333333;
+      --new:     #4a9eff;
+      --review:  #f0a500;
+      --accept:  #4caf7d;
+      --decline: #e05555;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ══ LOGIN ══════════════════════════════════════════════ */
+    #login {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+    .login-box {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .login-logo {
+      width: 120px;
+      mix-blend-mode: screen;
+      margin-bottom: 6px;
+    }
+    .login-sub {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      color: var(--muted);
+      margin-bottom: 52px;
+    }
+    .login-label {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      color: var(--dim);
+      margin-bottom: 10px;
+      align-self: flex-start;
+    }
+    .login-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border2);
+      padding: 12px 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--white);
+      outline: none;
+      margin-bottom: 32px;
+      letter-spacing: 0.1em;
+    }
+    .login-input:focus { border-color: var(--white); }
+    .login-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--white);
+      color: var(--bg);
+      border: none;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .login-btn:hover { opacity: 0.88; }
+    .login-err {
+      font-size: 11px;
+      color: var(--decline);
+      margin-top: 14px;
+      display: none;
+      letter-spacing: 0.05em;
+    }
+
+    /* ══ DASHBOARD ══════════════════════════════════════════ */
+    #dashboard { display: none; min-height: 100vh; }
+
+    /* top bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .top-logo { width: 60px; mix-blend-mode: screen; }
+    .top-title {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+    }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover { border-color: var(--white); color: var(--white); }
+
+    /* stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat {
+      padding: 24px 32px;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-n {
+      font-family: 'Cinzel', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* filters */
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { color: var(--off); }
+    .filter-btn.on { color: var(--white); border-bottom-color: var(--white); }
+
+    /* list */
+    .list { padding: 0 32px 48px; }
+
+    .empty {
+      padding: 80px 0;
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--dim);
+    }
+
+    .app-card {
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .app-card:hover { background: var(--s1); }
+    .app-card.open  { background: var(--s1); }
+
+    .card-row {
+      display: grid;
+      grid-template-columns: 2fr 2fr 1.5fr 1fr 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 0;
+    }
+
+    .card-name {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--white);
+    }
+    .card-email {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+    .card-budget {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      color: var(--off);
+      letter-spacing: 0.05em;
+    }
+    .card-date {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 2px;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+    }
+    .badge-new     { background: rgba(74,158,255,0.1); color: var(--new);    }
+    .badge-new::before     { background: var(--new); }
+    .badge-reviewing { background: rgba(240,165,0,0.1); color: var(--review); }
+    .badge-reviewing::before { background: var(--review); }
+    .badge-accepted  { background: rgba(76,175,125,0.1); color: var(--accept); }
+    .badge-accepted::before  { background: var(--accept); }
+    .badge-declined  { background: rgba(224,85,85,0.1);  color: var(--decline); }
+    .badge-declined::before  { background: var(--decline); }
+
+    /* expanded detail */
+    .card-detail {
+      display: none;
+      padding: 0 0 28px;
+      border-top: 1px solid var(--border);
+    }
+    .app-card.open .card-detail { display: block; }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-bottom: 24px;
+    }
+
+    .detail-section {
+      padding: 24px 24px 24px 0;
+      border-right: 1px solid var(--border);
+    }
+    .detail-section:last-child { padding-left: 24px; border-right: none; }
+
+    .detail-section h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .detail-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+    .detail-key {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .detail-val {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--off);
+      line-height: 1.6;
+    }
+    .detail-val.long {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--off);
+    }
+
+    /* actions */
+    .detail-actions {
+      padding: 0 0 0 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .status-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .status-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border2);
+      background: transparent;
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .status-btn:hover { border-color: var(--white); color: var(--white); }
+    .status-btn.active-new      { border-color: var(--new);     color: var(--new);     }
+    .status-btn.active-reviewing{ border-color: var(--review);  color: var(--review);  }
+    .status-btn.active-accepted { border-color: var(--accept);  color: var(--accept);  }
+    .status-btn.active-declined { border-color: var(--decline); color: var(--decline); }
+
+    .notes-wrap { flex: 1; }
+    .notes-label {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      color: var(--dim);
+      margin-bottom: 8px;
+    }
+    .notes-input {
+      width: 100%;
+      background: var(--s2);
+      border: 1px solid var(--border2);
+      padding: 12px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--white);
+      outline: none;
+      resize: none;
+      height: 72px;
+      line-height: 1.6;
+      transition: border-color 0.2s;
+    }
+    .notes-input::placeholder { color: var(--dim); }
+    .notes-input:focus { border-color: var(--border2); }
+
+    .save-btn {
+      margin-top: 8px;
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .save-btn:hover { border-color: var(--white); color: var(--white); }
+
+    /* mobile */
+    @media (max-width: 768px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stat { padding: 20px; }
+      .topbar { padding: 16px 20px; }
+      .filters { padding: 0 20px; }
+      .list { padding: 0 20px 48px; }
+      .card-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .card-budget, .card-date { display: none; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .detail-section { border-right: none; padding: 20px 0; border-bottom: 1px solid var(--border); }
+      .detail-section:last-child { border-bottom: none; }
+      .detail-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="login">
+  <div class="login-box">
+    <img src="logo.jpeg" alt="Yadegar" class="login-logo" />
+    <p class="login-sub">ADMIN ACCESS</p>
+    <p class="login-label">Password</p>
+    <input type="password" class="login-input" id="pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')tryLogin()" />
+    <button class="login-btn" onclick="tryLogin()">Enter</button>
+    <p class="login-err" id="login-err">Incorrect password. Try again.</p>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashboard">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="logo.jpeg" alt="Yadegar" class="top-logo" />
+      <span class="top-title">APPLICATIONS</span>
+    </div>
+    <button class="logout-btn" onclick="logout()">Sign Out</button>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="filters">
+    <button class="filter-btn on" data-f="all"       onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn"    data-f="new"       onclick="setFilter('new',this)">New</button>
+    <button class="filter-btn"    data-f="reviewing" onclick="setFilter('reviewing',this)">Reviewing</button>
+    <button class="filter-btn"    data-f="accepted"  onclick="setFilter('accepted',this)">Accepted</button>
+    <button class="filter-btn"    data-f="declined"  onclick="setFilter('declined',this)">Declined</button>
+  </div>
+
+  <div class="list" id="list"></div>
+</div>
+
+<script>
+  const PASSWORD = 'iloveronel';
+  let currentFilter = 'all';
+  let allApps = [];
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
+  function tryLogin() {
+    const val = document.getElementById('pw').value;
+    if (val === PASSWORD) {
+      sessionStorage.setItem('yc_auth', '1');
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadAll();
+    } else {
+      document.getElementById('login-err').style.display = 'block';
+      document.getElementById('pw').value = '';
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem('yc_auth');
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('login').style.display = 'flex';
+    document.getElementById('pw').value = '';
+  }
+
+  if (sessionStorage.getItem('yc_auth')) {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadAll();
+  }
+
+  // ── Supabase helpers ──────────────────────────────────────────────────────
+  function sbHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`
+    };
+  }
+
+  async function loadAll() {
+    document.getElementById('list').innerHTML = '<p class="empty">Loading...</p>';
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/applications?order=created_at.desc`, { headers: sbHeaders() });
+      allApps = await res.json();
+      renderStats();
+      renderList();
+    } catch {
+      document.getElementById('list').innerHTML = '<p class="empty">Could not load applications.</p>';
+    }
+  }
+
+  async function patchApp(id, data) {
+    await fetch(`${SUPABASE_URL}/rest/v1/applications?id=eq.${id}`, {
+      method: 'PATCH',
+      headers: { ...sbHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify(data)
+    });
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  function renderStats() {
+    const counts = { total: allApps.length, new: 0, accepted: 0, declined: 0 };
+    allApps.forEach(a => {
+      if (a.status === 'new')      counts.new++;
+      if (a.status === 'accepted') counts.accepted++;
+      if (a.status === 'declined') counts.declined++;
+    });
+    document.getElementById('stats').innerHTML = `
+      <div class="stat"><div class="stat-n">${counts.total}</div><div class="stat-label">Total Applications</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--new)">${counts.new}</div><div class="stat-label">New</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--accept)">${counts.accepted}</div><div class="stat-label">Accepted</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--decline)">${counts.declined}</div><div class="stat-label">Declined</div></div>
+    `;
+  }
+
+  function renderList() {
+    const filtered = currentFilter === 'all' ? allApps : allApps.filter(a => a.status === currentFilter);
+    const el = document.getElementById('list');
+    if (!filtered.length) { el.innerHTML = '<p class="empty">No applications here yet.</p>'; return; }
+    el.innerHTML = filtered.map(cardHTML).join('');
+  }
+
+  function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    renderList();
+  }
+
+  // ── Card ──────────────────────────────────────────────────────────────────
+  const budgetLabels  = { 'below':'Below $10k','10-25':'$10k – $25k','25-60':'$25k – $60k','60-150':'$60k – $150k','150plus':'$150k+','discuss':'To Discuss' };
+  const purposeLabels = { 'self':'For themselves','milestone':'Milestone','gift':'A gift','heirloom':'Family heirloom','collection':'Collection','other':'Other' };
+  const timelineLabels= { 'under12':'Under 12 months','12-24':'1–2 years','24-36':'2–3 years','open':'No timeline' };
+
+  function cardHTML(a) {
+    const date = new Date(a.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return `
+    <div class="app-card" id="card-${a.id}">
+      <div class="card-row" onclick="toggleCard('${a.id}')">
+        <div>
+          <div class="card-name">${a.first_name} ${a.last_name}</div>
+          <div class="card-email">${a.email}</div>
+        </div>
+        <div class="card-budget">${budgetLabels[a.budget] || a.budget}</div>
+        <div><span class="badge badge-${a.status}">${a.status}</span></div>
+        <div class="card-date">${date}</div>
+        <div class="card-date" style="color:var(--dim);text-align:right">${a.id}</div>
+      </div>
+      <div class="card-detail">
+        <div class="detail-grid">
+          <div class="detail-section">
+            <h3>Contact</h3>
+            <div class="detail-row"><span class="detail-key">Name</span><span class="detail-val">${a.first_name} ${a.last_name}</span></div>
+            <div class="detail-row"><span class="detail-key">Email</span><span class="detail-val">${a.email}</span></div>
+            ${a.phone ? `<div class="detail-row"><span class="detail-key">Phone</span><span class="detail-val">${a.phone}</span></div>` : ''}
+            <div class="detail-row"><span class="detail-key">Country</span><span class="detail-val">${a.country}</span></div>
+            <div class="detail-row"><span class="detail-key">Source</span><span class="detail-val">${a.source || '—'}</span></div>
+          </div>
+          <div class="detail-section" style="padding-left:24px;border-right:none">
+            <h3>Commission Details</h3>
+            <div class="detail-row"><span class="detail-key">Occasion</span><span class="detail-val">${purposeLabels[a.purpose] || a.purpose}</span></div>
+            <div class="detail-row"><span class="detail-key">Budget</span><span class="detail-val">${budgetLabels[a.budget] || a.budget}</span></div>
+            <div class="detail-row"><span class="detail-key">Timeline</span><span class="detail-val">${timelineLabels[a.timeline] || a.timeline || '—'}</span></div>
+            ${a.refs ? `<div class="detail-row"><span class="detail-key">References</span><span class="detail-val">${a.refs}</span></div>` : ''}
+          </div>
+        </div>
+        <div style="padding:0 0 24px">
+          <div class="detail-row"><span class="detail-key">Their Vision</span><span class="detail-val long">"${a.vision}"</span></div>
+          ${a.extra ? `<div class="detail-row" style="margin-top:12px"><span class="detail-key">Additional Notes</span><span class="detail-val long">"${a.extra}"</span></div>` : ''}
+        </div>
+        <div class="detail-actions">
+          <div>
+            <div class="notes-label">UPDATE STATUS</div>
+            <div class="status-btns">
+              <button class="status-btn ${a.status==='new'?'active-new':''}"            onclick="updateStatus('${a.id}','new',event)">New</button>
+              <button class="status-btn ${a.status==='reviewing'?'active-reviewing':''}" onclick="updateStatus('${a.id}','reviewing',event)">Reviewing</button>
+              <button class="status-btn ${a.status==='accepted'?'active-accepted':''}"   onclick="updateStatus('${a.id}','accepted',event)">Accepted</button>
+              <button class="status-btn ${a.status==='declined'?'active-declined':''}"   onclick="updateStatus('${a.id}','declined',event)">Declined</button>
+            </div>
+          </div>
+          <div class="notes-wrap">
+            <div class="notes-label">YOUR NOTES</div>
+            <textarea class="notes-input" id="notes-${a.id}" placeholder="Add private notes about this applicant...">${a.notes || ''}</textarea>
+            <button class="save-btn" onclick="saveNotes('${a.id}',event)">Save Notes</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // ── Interactions ──────────────────────────────────────────────────────────
+  function toggleCard(id) {
+    const card = document.getElementById('card-' + id);
+    const wasOpen = card.classList.contains('open');
+    document.querySelectorAll('.app-card.open').forEach(c => c.classList.remove('open'));
+    if (!wasOpen) card.classList.add('open');
+  }
+
+  async function updateStatus(id, status, e) {
+    e.stopPropagation();
+    await patchApp(id, { status });
+    const app = allApps.find(a => a.id === id);
+    if (app) app.status = status;
+    renderStats();
+    renderList();
+    setTimeout(() => { const c = document.getElementById('card-' + id); if (c) c.classList.add('open'); }, 10);
+  }
+
+  async function saveNotes(id, e) {
+    e.stopPropagation();
+    const notes = document.getElementById('notes-' + id).value;
+    await patchApp(id, { notes });
+    const app = allApps.find(a => a.id === id);
+    if (app) app.notes = notes;
+    const btn = e.target;
+    btn.textContent = 'Saved ✓';
+    setTimeout(() => btn.textContent = 'Save Notes', 1500);
+  }
+</script>
+</body>
+</html>

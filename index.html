@@ -66,23 +66,8 @@
       margin-left: auto;
       margin-right: auto;
     }
-    .logo-lg { width: min(340px, 78vw); margin-bottom: 14px; }
-    .logo-sm { width: 64px;  margin-bottom: 36px; }
-
-    /* Clip the empty top/bottom bands baked into logo.jpeg so
-       "& CO" tucks right under the YADEGAR wordmark. */
-    .logo-clip {
-      display: block;
-      width: min(340px, 78vw);
-      aspect-ratio: 430 / 82;
-      overflow: hidden;
-      margin: 0 auto 4px;
-    }
-    .logo-clip .logo {
-      display: block;
-      width: 100%;
-      margin: -37.7% 0 0;
-    }
+    .logo-lg { width: min(330px, 80vw); height: auto; margin-bottom: 6px; }
+    .logo-sm { width: 132px; height: auto; margin-bottom: 36px; }
 
     .co-block {
       display: flex;
@@ -454,7 +439,7 @@
 
   <!-- ══ INTRO ══ -->
   <div class="screen active" id="screen-intro">
-    <span class="logo-clip"><img src="logo.jpeg" alt="Yadegar" class="logo" /></span>
+    <img src="logo.svg" alt="Yadegar" class="logo logo-lg" />
     <div class="co-block">
       <span class="co-name">& CO</span>
       <div class="co-divider"></div>
@@ -494,7 +479,7 @@
 
   <!-- ══ STEP 1 ══ -->
   <div class="screen" id="screen-1">
-    <img src="logo.jpeg" alt="Yadegar" class="logo logo-sm" />
+    <img src="logo.svg" alt="Yadegar" class="logo logo-sm" />
     <div class="prog" id="p1"></div>
 
     <p class="s-tag">Step 1 of 4</p>
@@ -537,7 +522,7 @@
 
   <!-- ══ STEP 2 ══ -->
   <div class="screen" id="screen-2">
-    <img src="logo.jpeg" alt="Yadegar" class="logo logo-sm" />
+    <img src="logo.svg" alt="Yadegar" class="logo logo-sm" />
     <div class="prog" id="p2"></div>
 
     <p class="s-tag">Step 2 of 4</p>
@@ -577,7 +562,7 @@
 
   <!-- ══ STEP 3 ══ -->
   <div class="screen" id="screen-3">
-    <img src="logo.jpeg" alt="Yadegar" class="logo logo-sm" />
+    <img src="logo.svg" alt="Yadegar" class="logo logo-sm" />
     <div class="prog" id="p3"></div>
 
     <p class="s-tag">Step 3 of 4</p>
@@ -638,7 +623,7 @@
 
   <!-- ══ STEP 4 ══ -->
   <div class="screen" id="screen-4">
-    <img src="logo.jpeg" alt="Yadegar" class="logo logo-sm" />
+    <img src="logo.svg" alt="Yadegar" class="logo logo-sm" />
     <div class="prog" id="p4"></div>
 
     <p class="s-tag">Step 4 of 4</p>
@@ -689,7 +674,7 @@
 
   <!-- ══ SUCCESS ══ -->
   <div class="screen" id="screen-success">
-    <img src="logo.jpeg" alt="Yadegar" class="logo logo-sm" />
+    <img src="logo.svg" alt="Yadegar" class="logo logo-sm" />
     <div class="suc-rule"></div>
     <h2 class="suc-h">We'll Be<br>In Touch.</h2>
     <p class="suc-p">
@@ -705,7 +690,7 @@
 
   <!-- ══ DECLINED ══ -->
   <div class="screen" id="screen-declined">
-    <img src="logo.jpeg" alt="Yadegar" class="logo logo-sm" />
+    <img src="logo.svg" alt="Yadegar" class="logo logo-sm" />
     <h2 class="dec-h">Thank You<br>for Reaching Out.</h2>
     <p class="dec-p">
       Our pieces start at <span style="color:var(--off);font-style:normal">$10,000</span> —
@@ -856,31 +841,6 @@
     show('screen-intro');
   }
 
-  function removeLogoBG(img) {
-    const canvas = document.createElement('canvas');
-    canvas.className = img.className;
-    const ctx = canvas.getContext('2d');
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    canvas.style.width = img.style.width || '';
-    ctx.drawImage(img, 0, 0);
-    const d = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < d.data.length; i += 4) {
-      const brightness = (d.data[i] + d.data[i+1] + d.data[i+2]) / 3;
-      if (brightness < 60) {
-        d.data[i+3] = 0;
-      } else if (brightness < 140) {
-        d.data[i+3] = Math.round((brightness - 60) / 80 * 255);
-      }
-    }
-    ctx.putImageData(d, 0, 0);
-    img.replaceWith(canvas);
-  }
-
-  document.querySelectorAll('img.logo').forEach(img => {
-    if (img.complete && img.naturalWidth) removeLogoBG(img);
-    else img.onload = () => removeLogoBG(img);
-  });
 </script>
 </body>
 </html>

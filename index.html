@@ -69,6 +69,21 @@
     .logo-lg { width: min(340px, 78vw); margin-bottom: 14px; }
     .logo-sm { width: 64px;  margin-bottom: 36px; }
 
+    /* Clip the empty top/bottom bands baked into logo.jpeg so
+       "& CO" tucks right under the YADEGAR wordmark. */
+    .logo-clip {
+      display: block;
+      width: min(340px, 78vw);
+      aspect-ratio: 430 / 82;
+      overflow: hidden;
+      margin: 0 auto 4px;
+    }
+    .logo-clip .logo {
+      display: block;
+      width: 100%;
+      margin: -37.7% 0 0;
+    }
+
     .co-block {
       display: flex;
       flex-direction: column;
@@ -439,7 +454,7 @@
 
   <!-- ══ INTRO ══ -->
   <div class="screen active" id="screen-intro">
-    <img src="logo.jpeg" alt="Yadegar" class="logo logo-lg" />
+    <span class="logo-clip"><img src="logo.jpeg" alt="Yadegar" class="logo" /></span>
     <div class="co-block">
       <span class="co-name">& CO</span>
       <div class="co-divider"></div>
